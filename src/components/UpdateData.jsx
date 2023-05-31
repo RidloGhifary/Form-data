@@ -57,8 +57,8 @@ const UpdateData = () => {
                         type="checkbox"
                         className="form-check-input"
                         id="exampleCheck1"
-                        value={data.checked && data.checked}
-                        onChange={(e) => setData({ ...data, checked: e.target.value })} />
+                        checked={data.checked}
+                        onChange={(e) => setData({ ...data, checked: e.target.checked })} />
                     <label
                         className="form-check-label"
                         htmlFor="exampleCheck1">
