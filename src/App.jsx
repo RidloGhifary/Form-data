@@ -1,34 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import swal from 'sweetalert'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [column, setColumn] = useState()
+  const [tables, setTables] = useState()
+
+  useEffect(() => {
+    axios.get('http://localhost:3005/users')
+      .then(res => {
+        setColumn(Object.keys(res.data[0]))
+        setTables(res.data)
+      })
+      .catch(err => console.error(err))
+  })
+
+  const handleDelete = (id) => {
+    const confirm = window.confirm('Are you sure you want to delete this data?')
+    if (confirm) {
+      axios.delete(`http://localhost:3005/users/${id}`)
+        .then(alert('Data has benn Deleted'))
+    } else {
+      alert('Your data is Safe')
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='container table-responsive'>
+      <div className='text-end mb-3'>
+        <Link to='/addData' className='btn btn-primary'>Add Data</Link>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <table className="table">
+        <thead>
+          <tr>
+            {column?.map((d, i) => (
+              <th scope="col" key={i}>{d}</th>
+            ))}
+            <th>Update</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tables?.map((d, i) => (
+            <tr key={i}>
+              <th scope="row">{d.id}</th>
+              <td>{d.fullName}</td>
+              <td>{d.email}</td>
+              <td>{d.checked ? 'Checked' : 'No Checked'}</td>
+              <td>
+                <Link to={`/updateData/${d.id}`}
+                  className='btn btn-warning btn-sm'
+                >Update</Link>
+              </td>
+              <td>
+                <button
+                  className='btn btn-danger btn-sm'
+                  onClick={() => handleDelete(d.id)}
+                >Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

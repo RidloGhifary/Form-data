@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "fullName": "Ridlo ghifary",
+      "email": "ridlo@gmail.com",
+      "checked": "true"
+    },
+    {
+      "fullName": "Jessica anggara",
+      "email": "jessica@gmail.com",
+      "checked": true,
+      "id": 2
+    }
+  ]
+}
